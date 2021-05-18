@@ -4,7 +4,7 @@ const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
     Mutation: {
-        likePost: (_, {postId}, context) => {
+        likePost: async (_, {postId}, context) => {
             const {username} = checkAuth(context);
             const post = await Post.findById(postId);
             if(post){
