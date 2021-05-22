@@ -10,7 +10,7 @@ module.exports = {
             if(post){
                 if(post.likes.find(like => like.username === username)){
                     // Post already liked
-                    post.likes = post.likes.filter(like => like.username = username);
+                    post.likes = post.likes.filter(like => like.username !== username);
                     
                 }else{
                     // Not liked yet

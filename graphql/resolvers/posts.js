@@ -32,27 +32,32 @@ module.exports = {
     Mutation: {
         async createPost(_,{body}, context){
 
-            if(body.trim() == ""){
+            if(body.trim() === ""){
                 throw new Error('Post body cannot be empty');
             }
 
-            const user = checkAuth(context);
-            console.log(user);
 
-            const newPost = new Post({
-                body,
-                user: user.id,
-                username: user.username,
-                createdAt: new Date().toISOString()
+            try {
+                const user = checkAuth(context);
+                console.log(user);
 
-            })
+                const newPost = new Post({
+                    body,
+                    user: user.id,
+                    username: user.username,
+                    createdAt: new Date().toISOString()
 
-            const post = await newPost.save();
+                })
 
-            context.pubsub.publish('NEW_POST', {
-                newPost: post
-            })
-            return post;
+                const post = await newPost.save();
+
+                context.pubsub.publish('NEW_POST', {
+                    newPost: post
+                })
+                return post;
+            }catch(e){
+                throw new Error("Post body must not be empty")
+            }
         },
 
         async deletePost(_,{ postId }, context){
